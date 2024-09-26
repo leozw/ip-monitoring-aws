@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ip-monitoring-deployment
+  labels:
+    app: ip-monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ip-monitoring
+  template:
+    metadata:
+      labels:
+        app: ip-monitoring
+    spec:
+      serviceAccountName: ip-monitoring-sa
+      containers:
+        - name: ip-monitoring-container
+          image: leonardozwirtes/ip-monitoring-aws:latest
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          env:
+            - name: AWS_REGION
+              value: "us-east-1,sa-east-1"
